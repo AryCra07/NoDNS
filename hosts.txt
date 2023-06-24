@@ -1,0 +1,7 @@
+# hosts
+220.181.38.150    www.baidu.com
+117.161.28.98     www.zhihu.com
+119.3.70.188      bilibili.com
+212.64.63.190     gitee.com
+2001:da8:215:4078:250:56ff:fe97:654d   bt.byr.cn
+0.0.0.0           none.com
