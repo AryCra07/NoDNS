@@ -70,6 +70,7 @@ static void on_read(uv_udp_t *handle, ssize_t nread, const uv_buf_t *buf, const 
 
 /**
  * @brief 向远程发送查询报文的回调函数
+ *
  * @param req 发送句柄
  * @param status 发送状态
  */
@@ -86,7 +87,8 @@ void init_client(uv_loop_t *loop) {
     uv_udp_init(loop, &client_socket);
     // 设置本地地址，设置为 "0.0.0.0" 的作用是将客户端的 UDP socket 绑定到所有可用的网络接口上。
     uv_ip4_addr("0.0.0.0", CLIENT_PORT, &local_addr);
-    uv_udp_bind(&client_socket, (const struct sockaddr *) &local_addr, UV_UDP_REUSEADDR); // 绑定本地地址
+    // 绑定本地地址，启用端口复用，允许多个进程监听同一端口
+    uv_udp_bind(&client_socket, (const struct sockaddr *) &local_addr, UV_UDP_REUSEADDR);
     uv_udp_set_broadcast(&client_socket, 1); // 允许发送广播
     uv_ip4_addr(REMOTE_HOST, 53, (struct sockaddr_in *) &send_addr); // 设置远程服务器地址
     uv_udp_recv_start(&client_socket, alloc_buffer, on_read); // 开始接收
@@ -94,6 +96,7 @@ void init_client(uv_loop_t *loop) {
 
 /**
  * @brief 向远程发送报文
+ *
  * @param msg
  */
 void send_to_remote(const DNSMessage *msg) {

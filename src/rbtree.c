@@ -231,6 +231,13 @@ static RBTreeNode *node_init(unsigned int key, DNSRRLinkList *list, RBTreeNode *
     return node;
 }
 
+/**
+ * @brief 插入一个节点
+ *
+ * @param tree 节点所在的树
+ * @param key 节点的键
+ * @param list 节点的值
+ */
 void rbtree_insert(RBTree *tree, unsigned int key, DNSRRLinkList *list) {
     log_debug("插入红黑树")
     RBTreeNode *node = tree->root;
@@ -265,7 +272,6 @@ void rbtree_insert(RBTree *tree, unsigned int key, DNSRRLinkList *list) {
 
 /**
  * @brief 从给定节点开始递归查找键为给定值的节点
- *
  * @param node 当前节点
  * @param key 键
  * @return 如果找到了这样的节点，返回指向该节点的指针，否则返回NULL
@@ -345,7 +351,6 @@ static void delete_case(RBTree *tree, RBTreeNode *node) {
 
 /**
  * @brief 删除红黑树中的节点
- *
  * @param tree 节点所在的树
  * @param node 待删除的节点
  */
@@ -388,6 +393,12 @@ static void rbtree_delete(RBTree *tree, RBTreeNode *node) {
     destroy_node(node);
 }
 
+/**
+ * @brief 查询红黑树中键为给定值的节点
+ * @param tree
+ * @param key
+ * @return
+ */
 DNSRRLinkList *rbtree_query(RBTree *tree, unsigned int key) {
     log_debug("查询红黑树")
     RBTreeNode *node = rbtree_find(tree->root, key);

@@ -13,13 +13,14 @@
 #include "../include/dns_log.h"
 
 /**
- * @brief 从字节流中读入一个大端法表示的16位数字
+ * @brief 从字节流中读入一个大端法表示的16位数字（网络字节序是大端法）
  * @param pstring 字节流起点
  * @param offset 字节流偏移量
  * @return 从(pstring + *offset)开始的16位数字
  * @note 读入后，偏移量增加2
  */
 static uint16_t read_uint16(const char *pstring, unsigned *offset) {
+    // 读入一个16位数字，字节序转换，偏移量增加2
     uint16_t ret = ntohs(*(uint16_t *) (pstring + *offset));
     *offset += 2;
     return ret;
@@ -322,6 +323,12 @@ static void dnsrr_to_string(const DNSResourceRecord *prr, char *pstring, unsigne
     }
 }
 
+/**
+ * @brief 将DNSMessage转换为字节流
+ * @param pmsg DNSMessage
+ * @param pstring 字节流起点
+ * @return 字节流长度
+ */
 unsigned dnsmsg_to_string(const DNSMessage *pmsg, char *pstring) {
     unsigned offset = 0;
     dnshead_to_string(pmsg->header, pstring, &offset);
@@ -364,6 +371,11 @@ void destroy_dnsmsg(DNSMessage *pmsg) {
     free(pmsg);
 }
 
+/**
+ * @brief 复制一个Question Section
+ * @param src 原Question Section
+ * @return 复制的Question Section
+ */
 DNSResourceRecord *copy_dnsrr(const DNSResourceRecord *src) {
     if (src == NULL) return NULL;
     // 复制链表的头节点
@@ -400,6 +412,11 @@ DNSResourceRecord *copy_dnsrr(const DNSResourceRecord *src) {
     return rr;
 }
 
+/**
+ * @brief 复制DNS报文
+ * @param src
+ * @return
+ */
 DNSMessage *copy_dnsmsg(const DNSMessage *src) {
     if (src == NULL) return NULL;
     DNSMessage *new_msg = (DNSMessage *) calloc(1, sizeof(DNSMessage));

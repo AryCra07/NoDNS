@@ -18,7 +18,7 @@ typedef enum {
 
 // 红黑树节点链表的节点的值，对应一个特定查询的答案
 typedef struct rbtree_value {
-    DNSResourceRecord *rr; // 指向一个Dns_RR的链表
+    DNSResourceRecord *rr; // 指向一个DNSResourceRecord的链表
     uint16_t ancount; // RR链表中Answer Section的数目
     uint16_t nscount; // RR链表中Authority Section的数目
     uint16_t arcount; // RR链表中Addition Section的数目
@@ -59,7 +59,7 @@ typedef struct dns_rr_linklist {
 
 // 红黑树的节点
 typedef struct rbtree_node {
-    unsigned int key; // 红黑树节点的键
+    unsigned int key; // 红黑树节点的键，对应DNS查询的ID
     DNSRRLinkList *rr_list; // 指向当前节点对应的链表
     Color color; // 当前节点的颜色
     struct rbtree_node *left; // 指向当前节点的左子节点

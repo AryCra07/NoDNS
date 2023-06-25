@@ -84,11 +84,16 @@ static void on_read(uv_udp_t *handle, ssize_t nread, const uv_buf_t *buf, const 
 void init_server(uv_loop_t *loop) {
     log_info("启动server")
     uv_udp_init(loop, &server_socket); // 将server_docket绑定到事件循环
-    uv_ip4_addr("0.0.0.0", 53, &recv_addr); // 初始化recv_addr为0.0.0.0:53
-    uv_udp_bind(&server_socket, (struct sockaddr *) &recv_addr, UV_UDP_REUSEADDR);
+    uv_ip4_addr("0.0.0.0", 53, &recv_addr); // 初始化recv_addr为0.0.0.0:53，能够接收所有本地发送到53端口的报文
+    uv_udp_bind(&server_socket, (struct sockaddr *) &recv_addr, UV_UDP_REUSEADDR); // 启用端口复用，允许多个进程监听同一端口
     uv_udp_recv_start(&server_socket, alloc_buffer, on_read); // 当收到DNS查询报文时，分配缓冲区并调用回调函数
 }
 
+/**
+ * @brief 向本地发送回复报文
+ * @param addr 本地地址
+ * @param msg DNS回复报文
+ */
 void send_to_local(const struct sockaddr *addr, const DNSMessage *msg) {
     log_info("发送DNS回复报文到本地")
     print_dns_message(msg);

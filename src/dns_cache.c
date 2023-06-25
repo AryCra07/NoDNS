@@ -15,7 +15,7 @@
 
 /**
  * @brief 字符串哈希
- *
+ *@details 采用BKDRHash算法将字符串转换为哈希值，用于在缓存中查找
  * @param str 字符串
  * @return 该字符串的哈希值
  */
@@ -190,7 +190,7 @@ Cache *new_cache(FILE *hosts_file) {
                     log_fatal("内存分配错误")
                     exit(1);
                 }
-                uv_inet_pton(AF_INET, ip, rr->rdata);
+                uv_inet_pton(AF_INET, ip, rr->rdata); // 将点分十进制ip地址转换为二进制
             } else { // ipv6
                 rr->type = DNS_TYPE_AAAA;
                 rr->rdlength = 16;
