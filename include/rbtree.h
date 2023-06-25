@@ -73,11 +73,9 @@ typedef struct rbtree {
 
     /**
      * @brief 向红黑树中插入键-值对
-     *
      * @param tree 红黑树
      * @param key 键
      * @param list 值
-     *
      * 此函数从根节点开始迭代查找插入位置，如果该键对应的节点不存在，则创建一个新节点，并且维护树的平衡；否则在原有节点的链表上插入新元素。
      */
     void (*insert)(struct rbtree *tree, unsigned int key, DNSRRLinkList *list);
@@ -96,14 +94,12 @@ typedef struct rbtree {
 
 /**
  * @brief 创建链表节点
- *
  * @return 新的链表节点
  */
 DNSRRLinkList *new_linklist();
 
 /**
  * @brief 创建红黑树
- *
  * @return 新的红黑树
  */
 RBTree *new_rbtree();

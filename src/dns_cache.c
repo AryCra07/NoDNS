@@ -67,7 +67,7 @@ static void cache_insert(Cache *cache, const DNSMessage *msg) {
     DNSRRLinkList *new_list_node = new_linklist();
     new_list_node->value = value;
     new_list_node->expire_time = time(NULL) + get_min_ttl(value->rr); // 计算过期时间
-    if (cache->size == CACHE_SIZE) {
+    if (cache->size == CACHE_SIZE) { // cache已满
         cache->head->delete_next(cache->head); // 去除最久未访问的元素
         --cache->size;
     }
@@ -90,13 +90,19 @@ static void cache_insert(Cache *cache, const DNSMessage *msg) {
     cache->tree->insert(cache->tree, BKDRHash(value->rr->name), new_list_node); // 插入红黑树
 }
 
+/**
+ * @brief 查询缓存
+ * @param cache
+ * @param que
+ * @return 查询结果
+ */
 static RBTreeValue *cache_query(Cache *cache, const DNSQuestion *que) {
     log_info("查询cache")
     DNSRRLinkList *list = cache->head->query_next(cache->head, que->qname, que->qtype);
     if (list != NULL) {
         log_info("cache命中")
         DNSRRLinkList *temp = list->next;
-        if (temp != cache->tail) {
+        if (temp != cache->tail) { // 将命中的元素移动到链表尾部
             list->next = list->next->next;
             cache->tail->insert(cache->tail, temp);
             cache->tail = cache->tail->next;
@@ -110,7 +116,7 @@ static RBTreeValue *cache_query(Cache *cache, const DNSQuestion *que) {
         return value;
     }
 
-    log_info("cache未命中")
+    log_info("cache未命中") // 红黑树查询
     list = cache->tree->query(cache->tree, BKDRHash(que->qname));
     while (list != NULL) {
         if (strcmp(list->value->rr->name, que->qname) == 0 &&
@@ -145,6 +151,14 @@ static RBTreeValue *cache_query(Cache *cache, const DNSQuestion *que) {
     return NULL;
 }
 
+/**
+ * @brief 初始化缓存
+ * @details 读取hosts文件将其转换为DNS资源记录，插入红黑树以便查询，插入链表以便删除
+ * 链表中的元素按照过期时间排序，最先过期的元素在链表头部，最后过期的元素在链表尾部，每次插入新元素时，将其插入链表尾部
+ * 每次查询时，从链表头部开始查询，如果过期则删除，如果未过期则将其移动到链表尾部
+ * @param hosts_file
+ * @return
+ */
 Cache *new_cache(FILE *hosts_file) {
     log_info("初始化cache")
     Cache *cache = (Cache *) malloc(sizeof(Cache));
@@ -165,8 +179,7 @@ Cache *new_cache(FILE *hosts_file) {
             rr->name[strlen(domain)] = '.';
             rr->class = DNS_CLASS_IN;
             rr->ttl = -1; // 永久有效
-            if (strchr(ip, '.') != NULL) // ipv4
-            {
+            if (strchr(ip, '.') != NULL) { // ipv4
                 if (strcmp(ip, "0.0.0.0") == 0)
                     rr->type = 255;
                 else
@@ -178,8 +191,7 @@ Cache *new_cache(FILE *hosts_file) {
                     exit(1);
                 }
                 uv_inet_pton(AF_INET, ip, rr->rdata);
-            } else // ipv6
-            {
+            } else { // ipv6
                 rr->type = DNS_TYPE_AAAA;
                 rr->rdlength = 16;
                 rr->rdata = (uint8_t *) calloc(16, sizeof(uint8_t));
