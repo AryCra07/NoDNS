@@ -7,8 +7,20 @@
 
 #include "dns_structure.h"
 
-void printDNSBytes(const char *ptr, unsigned int len);
+/**
+ * @brief 打印DNS报文字节流
+ *
+ * @param pstring DNS报文字节流
+ * @param len 字节流长度
+ */
+void print_dns_string(const char * pstring, unsigned int len);
 
-void printDNSMessage(const DNSMessage *msg);
+/**
+ * @brief 打印DNS报文结构体
+ *
+ * @param pmsg DNS报文结构体
+ */
+void print_dns_message(const DNSMessage * pmsg);
+
 
 #endif //GODNS_DNS_PRINT_H

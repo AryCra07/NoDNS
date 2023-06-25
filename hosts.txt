@@ -1,7 +1,7 @@
-# hosts
-220.181.38.150    www.baidu.com
-117.161.28.98     www.zhihu.com
-119.3.70.188      bilibili.com
-212.64.63.190     gitee.com
-2001:da8:215:4078:250:56ff:fe97:654d   bt.byr.cn
-0.0.0.0           none.com
+baidu.com 220.181.38.148
+www.cloudflare.com 104.16.124.96
+www.bupt.edu.cn 0.0.0.0
+google.com 172.217.160.78
+test.com 0.0.0.0
+csdn.net 0.0.0.0
+bt.byr.cn 2001:da8:215:4078:250:56ff:fe97:654d
