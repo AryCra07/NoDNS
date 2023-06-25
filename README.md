@@ -13,7 +13,7 @@
 
 ### 环境配置
 
-- Linux 系统，推荐使用 WSL 以便在 Windows 下使用
+- Linux 系统，推荐 WSL 以便在 Windows 下使用
 - 需要安装 CMake 与 libuv 库
 ```
 $ apt install cmake -y
