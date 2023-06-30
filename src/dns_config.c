@@ -1,11 +1,7 @@
 /**
  * @file      config_jar.c
  * @brief     命令行参数解析
- * @author    Ziheng Mao
- * @date      2021/5/29
- * @copyright GNU General Public License, version 3 (GPL-3.0)
- *
- * 本文件中实现了命令行参数解析函数。
+ * @details 本文件中实现了命令行参数解析函数
 */
 
 #include "../include/dns_config.h"
