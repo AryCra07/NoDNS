@@ -1,11 +1,7 @@
 /**
  * @file      queue.c
  * @brief     队列
- * @author    Ziheng Mao
- * @date      2021/4/5
- * @copyright GNU General Public License, version 3 (GPL-3.0)
- *
- * 本文件的内容是队列的实现。
+ * @details   本文件的内容是队列的实现。
 */
 
 #include "../include/queue.h"
