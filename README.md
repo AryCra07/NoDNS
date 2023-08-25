@@ -1,4 +1,4 @@
-# GoDNS
+# NoDNS
 
 基于 libuv 库实现的 Linux DNS 服务器
 
